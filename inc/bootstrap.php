@@ -26,8 +26,11 @@ mb_internal_encoding('UTF-8');
 
 // --- Базовый адрес сайта (работает и в корне домена, и в подпапке htdocs/karamel) ---
 (function (): void {
-    $script = str_replace('\\', '/', (string)($_SERVER['SCRIPT_FILENAME'] ?? ''));
-    $root = str_replace('\\', '/', ROOT);
+    // Пути сравниваются в канонической форме: на Windows Apache и PHP могут записывать один и тот же каталог
+    // по-разному (короткие имена 8.3, кириллица в имени профиля), и без realpath подкаталоги staff/ и admin/ теряли бы префикс.
+    $scriptRaw = (string)($_SERVER['SCRIPT_FILENAME'] ?? '');
+    $script = str_replace('\\', '/', (string)(realpath($scriptRaw) ?: $scriptRaw));
+    $root = str_replace('\\', '/', (string)(realpath(ROOT) ?: ROOT));
     $rel = (stripos($script, $root . '/') === 0) ? substr($script, strlen($root) + 1) : basename($script);
     $name = str_replace('\\', '/', (string)($_SERVER['SCRIPT_NAME'] ?? '/index.php'));
     $base = '';
