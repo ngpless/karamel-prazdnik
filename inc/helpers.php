@@ -34,13 +34,19 @@ function redirect(string $path, array $query = []): void
 /** Безопасный внутренний адрес для параметров next/back: только путь на этом же сайте. */
 function safe_local(string $target, string $fallback = 'index.php'): string
 {
-    $target = trim($target);
-    if ($target === '' || $target[0] !== '/' || str_starts_with($target, '//') || str_contains($target, '\\')
-        || preg_match('~[\r\n]~', $target)) {
-        return url($fallback);
+    $home = url($fallback);
+    // Любые управляющие и пробельные символы (в том числе в закодированном виде), обратный слэш, «//» вначале
+    foreach ([$target, rawurldecode($target), rawurldecode(rawurldecode($target))] as $t) {
+        if ($t === '' || $t[0] !== '/' || preg_match('~[\x00-\x20\x7f\\\\]~', $t) || str_starts_with($t, '//')) {
+            return $home;
+        }
+    }
+    $parts = parse_url($target);
+    if ($parts === false || isset($parts['scheme']) || isset($parts['host']) || isset($parts['user'])) {
+        return $home;
     }
     if (BASE !== '' && !str_starts_with($target, BASE . '/')) {
-        return url($fallback);
+        return $home;
     }
     return $target;
 }

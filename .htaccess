@@ -15,6 +15,17 @@ AddDefaultCharset UTF-8
 # Запасной вариант, если mod_rewrite отключён, а сайт лежит в корне домена:
 # ErrorDocument 404 /404.php
 
+# Скрытые и служебные файлы недоступны из браузера
+<FilesMatch "^(\.|config(\.example)?\.php$|router\.php$)|\.(sqlite|sqlite-journal|db|sql|log|py|md)$">
+    <IfModule mod_authz_core.c>
+        Require all denied
+    </IfModule>
+    <IfModule !mod_authz_core.c>
+        Order allow,deny
+        Deny from all
+    </IfModule>
+</FilesMatch>
+
 <IfModule mod_headers.c>
     Header set X-Content-Type-Options "nosniff"
     Header set X-Frame-Options "SAMEORIGIN"

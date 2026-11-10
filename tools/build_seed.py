@@ -5,7 +5,7 @@
 Подходит и для MySQL, и для SQLite: только стандартные INSERT, кавычки удваиваются, без обратных слэшей.
 Хеши паролей создаёт сам PHP (password_hash), в базе нет открытых паролей.
 """
-import os, re, subprocess, sys, datetime
+import os, re, subprocess, sys, datetime, secrets
 
 ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..')
 
@@ -96,9 +96,11 @@ news = [
      'Зарегистрируйтесь на сайте или попросите менеджера создать для вас учётную запись. В личном кабинете доступны форма заявки, список ваших заявок со статусами и переписка с менеджером.\n\nНа значке кабинета в шапке отображается число непрочитанных ответов, поэтому важное сообщение вы не пропустите.'),
 ]
 
-# Тестовые учётные записи (пароли только для проверки; в базе хранятся хеши)
+# Тестовые учётные записи сотрудника и клиента с известными паролями (нужны для отчёта по практике).
+# Пароль администратора в исходниках НЕ хранится: он случайный, печатается один раз при сборке
+# (или задаётся ключом --admin-password), а при первом входе его нужно сменить.
 users = [
-    ('admin', 'admin@karamel.example', 'Администратор Сайта', '+7 (000) 000-00-01', 'admin', 'Karamel-Admin25'),
+    ('admin', 'admin@karamel.example', 'Администратор Сайта', '+7 (000) 000-00-01', 'admin', None),  # пароль генерируется при сборке
     ('manager', 'manager@karamel.example', 'Анна Верная', '+7 (000) 000-00-02', 'manager', 'Karamel-Manager25'),
     ('client', 'client@karamel.example', 'Елена Петрова', '+7 (000) 000-00-03', 'client', 'Karamel-Client25'),
 ]
@@ -156,13 +158,22 @@ def main():
                    f"({q(title)}, {q(text)}, {q(link)}, {q(button)}, {q(img)}, {order}, 1);")
     sql.append('')
     now = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    admin_pw = None
+    if '--admin-password' in sys.argv:
+        admin_pw = sys.argv[sys.argv.index('--admin-password') + 1]
+    else:
+        admin_pw = 'A' + secrets.token_urlsafe(9).replace('-', 'x').replace('_', 'y') + '7'
     for (login, email, name, phone, role, pw) in users:
+        must = 0
+        if role == 'admin':
+            pw, must = admin_pw, 1
         sql.append("INSERT INTO users (login, email, password_hash, full_name, phone, role, is_active, must_change_password, failed_attempts, created_by, created_at) VALUES "
-                   f"({q(login)}, {q(email)}, {q(php_hash(pw))}, {q(name)}, {q(phone)}, {q(role)}, 1, 0, 0, NULL, {q(now)});")
+                   f"({q(login)}, {q(email)}, {q(php_hash(pw))}, {q(name)}, {q(phone)}, {q(role)}, 1, {must}, 0, NULL, {q(now)});")
     out = os.path.join(ROOT, 'sql', 'seed.sql')
     with open(out, 'w', encoding='utf-8', newline='\n') as f:
         f.write('\n'.join(sql) + '\n')
     print('seed.sql записан: статей', total_articles, ', новостей', len(news), ', услуг', len(services), ', баннеров', len(banners), ', пользователей', len(users))
+    print('ПАРОЛЬ АДМИНИСТРАТОРА (логин admin, показан один раз, смените при первом входе):', admin_pw)
 
 
 if __name__ == '__main__':

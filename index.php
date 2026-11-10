@@ -11,9 +11,17 @@ $services = db_all('SELECT * FROM services ORDER BY sort_order, id');
 $sections = db_all('SELECT s.*, (SELECT COUNT(*) FROM articles a WHERE a.section_id = s.id AND a.is_published = 1) AS cnt FROM sections s ORDER BY s.sort_order, s.id');
 $news = db_all('SELECT * FROM news WHERE is_published = 1 ORDER BY created_at DESC, id DESC LIMIT 3');
 $articleCount = (int)db_val('SELECT COUNT(*) FROM articles WHERE is_published = 1');
-$popular = db_all('SELECT a.slug, a.title, a.summary, s.title AS section_title, s.image AS image
+$latestAll = db_all('SELECT a.slug, a.title, a.summary, a.section_id, s.title AS section_title, s.image AS image
                    FROM articles a JOIN sections s ON s.id = a.section_id
-                   WHERE a.is_published = 1 ORDER BY a.created_at DESC, a.id DESC LIMIT 3');
+                   WHERE a.is_published = 1 ORDER BY a.created_at DESC, a.id DESC');
+$popular = [];
+$seen = [];
+foreach ($latestAll as $row) {          // по одной свежей статье из разных разделов
+    if (!isset($seen[$row['section_id']]) && count($popular) < 3) {
+        $seen[$row['section_id']] = true;
+        $popular[] = $row;
+    }
+}
 
 require __DIR__ . '/inc/header.php';
 ?>
