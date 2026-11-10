@@ -126,7 +126,7 @@ def php_hash(password):
 
 def main():
     sql = ['-- Начальные данные сайта «Карамель». Создаётся командой: python tools/build_seed.py',
-           '-- Файл подходит для MySQL/MariaDB и SQLite.', '']
+           '-- Файл подходит для MySQL/MariaDB и SQLite.', '-- Кодировка соединения задаётся здесь, чтобы импорт был верным в любом клиенте (phpMyAdmin, mysql).', '/*!40101 SET NAMES utf8mb4 */;', '']
     for i, (slug, title, desc, img, order) in enumerate(sections, 1):
         sql.append(f"INSERT INTO sections (id, slug, title, description, image, sort_order) VALUES ({i}, {q(slug)}, {q(title)}, {q(desc)}, {q(img)}, {order});")
     sql.append('')

@@ -1,5 +1,7 @@
 -- Начальные данные сайта «Карамель». Создаётся командой: python tools/build_seed.py
 -- Файл подходит для MySQL/MariaDB и SQLite.
+-- Кодировка соединения задаётся здесь, чтобы импорт был верным в любом клиенте (phpMyAdmin, mysql).
+/*!40101 SET NAMES utf8mb4 */;
 
 INSERT INTO sections (id, slug, title, description, image, sort_order) VALUES (1, 'birthdays', 'Детские дни рождения', 'Темы, сценарии, меню, аниматоры и безопасность: всё, что нужно для яркого дня рождения ребёнка.', 'sec-birthdays.svg', 1);
 INSERT INTO sections (id, slug, title, description, image, sort_order) VALUES (2, 'graduations', 'Выпускные', 'Подготовка выпускного в детском саду и начальной школе: сценарий, бюджет, работа родительского комитета, фото и видео.', 'sec-graduations.svg', 2);
