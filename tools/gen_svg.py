@@ -114,7 +114,7 @@ def write(path, content):
 
 
 # ---------- логотип ----------
-logo = svg(48, 48, balloon(24, 18, 13, CORAL, False) + f'<path d="M24 41 q -6 3 0 6" fill="none" stroke="{INK}" stroke-width="2"/>'
+logo = svg(48, 48, balloon(24, 18, 13, CORAL, False) + f'<path d="M24 33 q -4 6 0 11" fill="none" stroke="{INK}" stroke-width="2" stroke-linecap="round"/>'
            + f'<circle cx="36" cy="38" r="6" fill="{MINT}"/><circle cx="12" cy="38" r="4" fill="{BUTTER}"/>', 'aria-hidden="true"')
 write('logo-mark.svg', logo)
 write('favicon.svg', logo)
