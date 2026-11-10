@@ -1,0 +1,22 @@
+# Сайт «Карамель» (учебный проект). Apache + mod_rewrite.
+DirectoryIndex index.php
+Options -Indexes
+AddDefaultCharset UTF-8
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    # Любой несуществующий файл или каталог показывает страницу 404
+    # (относительная подстановка работает и в подпапке htdocs/karamel).
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^ 404.php [L]
+</IfModule>
+
+# Запасной вариант, если mod_rewrite отключён, а сайт лежит в корне домена:
+# ErrorDocument 404 /404.php
+
+<IfModule mod_headers.c>
+    Header set X-Content-Type-Options "nosniff"
+    Header set X-Frame-Options "SAMEORIGIN"
+    Header set Referrer-Policy "strict-origin-when-cross-origin"
+</IfModule>
