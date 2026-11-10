@@ -1,5 +1,5 @@
 /* ==========================================================================
-   Карамель: версия для слабовидящих (по ГОСТ Р 52872-2012)
+   Карамель: версия для слабовидящих (по ГОСТ Р 52872-2019)
    Отдельная таблица стилей: подключается ВМЕСТО style.css.
    Крупный шрифт без засечек (Arial/Verdana), три размера, четыре контрастные
    пары цветов, без фоновых картинок, без анимации, видимый фокус, логичный порядок для клавиатуры.
@@ -7,10 +7,10 @@
    ========================================================================== */
 :root { --maxw: 64rem; }
 
-body.lv { --bg: #fff; --fg: #000; --link: #00008B; --btn-bg: #000; --btn-fg: #fff; --soft: #eee; --line: #000;
+body.lv { --focus: #8A3700; --bg: #fff; --fg: #000; --link: #00008B; --btn-bg: #000; --btn-fg: #fff; --soft: #eee; --line: #000;
     margin: 0; background: var(--bg); color: var(--fg); font-family: Arial, Verdana, Helvetica, sans-serif; line-height: 1.7; letter-spacing: .02em; }
 body.scheme-bw { --bg: #fff; --fg: #000; --link: #00008B; --btn-bg: #000; --btn-fg: #fff; --soft: #ececec; --line: #000; }
-body.scheme-wb { --bg: #000; --fg: #fff; --link: #FFE600; --btn-bg: #fff; --btn-fg: #000; --soft: #1c1c1c; --line: #fff; }
+body.scheme-wb { --focus: #FF8C00; --bg: #000; --fg: #fff; --link: #FFE600; --btn-bg: #fff; --btn-fg: #000; --soft: #1c1c1c; --line: #fff; }
 body.scheme-bl { --bg: #9DD1FF; --fg: #063462; --link: #063462; --btn-bg: #063462; --btn-fg: #9DD1FF; --soft: #bfe0ff; --line: #063462; }
 body.scheme-br { --bg: #F7F3D6; --fg: #3B2300; --link: #3B2300; --btn-bg: #3B2300; --btn-fg: #F7F3D6; --soft: #ebe5bd; --line: #3B2300; }
 body.font-1 { font-size: 22px; }
@@ -25,7 +25,7 @@ body.font-3 { font-size: 36px; }
 .lv p, .lv li, .lv dd, .lv dt, .lv td, .lv th { font-size: 1em; }
 .lv a { color: var(--link); text-decoration: underline; text-decoration-thickness: .08em; text-underline-offset: .15em; }
 .lv a:hover { text-decoration-thickness: .16em; }
-.lv a:focus, .lv button:focus, .lv input:focus, .lv select:focus, .lv textarea:focus { outline: 5px solid #FF8C00; outline-offset: 3px; background-color: var(--soft); }
+.lv a:focus, .lv button:focus, .lv input:focus, .lv select:focus, .lv textarea:focus { outline: 5px solid var(--focus); outline-offset: 3px; background-color: var(--soft); }
 .lv .muted, .lv .hint, .lv small { color: var(--fg); opacity: 1; font-size: .85em; }
 .lv img, .lv svg { max-width: 100%; height: auto; }
 .lv.noimg img.deco, .lv.noimg .deco { display: none !important; }
