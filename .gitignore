@@ -1,0 +1,10 @@
+# локальная конфигурация с паролями БД
+config.php
+# файл базы SQLite (создаётся автоматически)
+data/*.sqlite
+data/*.sqlite-journal
+data/*.db
+# служебное
+*.log
+.DS_Store
+Thumbs.db
